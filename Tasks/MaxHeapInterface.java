@@ -1,3 +1,5 @@
+package Tasks
+
 public interface MaxHeapInterface<T extends Comparable<? super T>>
 {
     /** Adds a new entry to this heap.
