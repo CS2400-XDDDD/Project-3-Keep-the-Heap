@@ -1,4 +1,7 @@
+package Tasks;
+
 import java.util.Arrays;
+
 public final class MaxHeap<T extends Comparable<? super T>> implements MaxHeapInterface<T>
 {
     private T[] heap;
@@ -61,7 +64,7 @@ public final class MaxHeap<T extends Comparable<? super T>> implements MaxHeapIn
         checkInitialization();
         int newIndex = lastIndex + 1;
         int parentIndex = newIndex / 2;
-        while ((parentIndex > 0) && newEntry.compareto(heap[parentIndex]) > 0)
+        while ((parentIndex > 0) && newEntry.compareTo(heap[parentIndex]) > 0)
         {
             heap[newIndex] = heap[parentIndex];
             newIndex = parentIndex;
@@ -110,5 +113,30 @@ public final class MaxHeap<T extends Comparable<? super T>> implements MaxHeapIn
         }
         return root;
     }
-}
+    
+    private void ensureCapacity()
+    {
+        if (lastIndex >= heap.length - 1)  // Check if array is full
+        {
+            int newCapacity = 2 * heap.length;
+            checkCapacity(newCapacity);  // Ensure the new capacity does not exceed maximum
+            heap = Arrays.copyOf(heap, newCapacity);
+        }
+    }
 
+    private void checkCapacity(int capacity)
+    {
+        if (capacity > MAX_CAPACITY)
+        {
+            throw new IllegalStateException("Attempted to create a heap larger than the maximum allowed capacity.");
+        }
+    }
+
+    private void checkInitialization()
+    {
+        if (!initialized)
+        {
+            throw new IllegalStateException("MaxHeap not initialized.");
+        }
+    }
+}
