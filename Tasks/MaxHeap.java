@@ -9,6 +9,7 @@ public final class MaxHeap<T extends Comparable<? super T>> implements MaxHeapIn
     private boolean initialized = false;
     private static final int DEFAULT_CAPACITY = 25;
     private static final int MAX_CAPACITY = 10000;
+    private int swapCount;
 
     public MaxHeap()
     {
@@ -16,6 +17,7 @@ public final class MaxHeap<T extends Comparable<? super T>> implements MaxHeapIn
     }
     public MaxHeap(int initialCapacity)
     {
+        swapCount = 0;
         if (initialCapacity < DEFAULT_CAPACITY)
             initialCapacity = DEFAULT_CAPACITY;
         else
@@ -93,6 +95,7 @@ public final class MaxHeap<T extends Comparable<? super T>> implements MaxHeapIn
                 heap[rootIndex] = heap[largerChildIndex];
                 rootIndex = largerChildIndex;
                 leftChildIndex = 2 * rootIndex;
+                swapCount++;
             }
             else
                 done = true;
@@ -139,4 +142,28 @@ public final class MaxHeap<T extends Comparable<? super T>> implements MaxHeapIn
             throw new IllegalStateException("MaxHeap not initialized.");
         }
     }
+
+    public MaxHeap(T[] entries)
+    {
+        this(entries.length);
+        lastIndex = entries.length;
+
+        for (int index = 0; index < entries.length; index++)
+            heap[index + 1] = entries[index];
+
+        for (int rootIndex = lastIndex / 2; rootIndex > 0; rootIndex--)
+            reheap(rootIndex);
+    }
+
+    public int getSwapCount() {
+        return swapCount;
+    }
+
+    public T getElement(int index) {
+        if (index < 1 || index > lastIndex) {
+            throw new IndexOutOfBoundsException("Index out of bounds");
+        }
+        return heap[index];
+    }
+
 }

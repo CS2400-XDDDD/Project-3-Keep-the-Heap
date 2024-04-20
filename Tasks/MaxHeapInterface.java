@@ -26,4 +26,12 @@ public interface MaxHeapInterface<T extends Comparable<? super T>>
 
         /** Removes all entries from this heap. */
         public void clear();
+
+
+        public MaxHeap(T[] entries);
+
+        public int getSwapCount();
+
+        public T getElement(int index);
+
 }      // end MaxHeapInterface

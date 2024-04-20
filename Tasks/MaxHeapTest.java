@@ -1,4 +1,6 @@
 package Tasks;
+import java.io.*;
+import java.util.*;
 
 public class MaxHeapTest {
     public static void main(String[] args) {
@@ -8,6 +10,7 @@ public class MaxHeapTest {
         testRemoveMax();
         testClear();
         testEnsureCapacity();
+        testOptimal();
     }
 
     private static void testIsEmptyOnNewHeap() {
@@ -60,5 +63,39 @@ public class MaxHeapTest {
         }
         assert maxHeap.getSize() == 1000 : "Heap should contain 1000 elements";
         System.out.println("Test ensure capacity passed.");
+    }
+
+    private static void testOptimal() {
+        try{
+            Scanner scanner = new Scanner(new File("data.txt"));
+            List<Integer> inputList = new ArrayList<>();
+            while (scanner.hasNextInt()) {
+                inputList.add(scanner.nextInt());
+            }
+            scanner.close();
+
+            Integer[] inputArray = inputList.toArray(new Integer[0]);
+
+            MaxHeap<Integer> maxHeap = new MaxHeap<>(inputArray);
+
+            PrintWriter writer = new PrintWriter(new FileWriter("output.txt"));
+            writer.print("Heap built using optimal method: ");
+            for (int i = 0; i < 10; i++) {
+                writer.print(maxHeap.getElement(i + 1) + " ");
+            }
+            writer.println();
+            writer.println("Number of swaps in the heap creation: " + maxHeap.getSwapCount());
+
+            writer.print("Heap after 10 removals: ");
+            for (int i = 0; i < 10; i++) {
+                Integer removed = maxHeap.removeMax();
+            }
+            for (int i = 0; i < 10; i++) {
+                writer.print(maxHeap.getElement(i + 1) + " ");
+            }
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
