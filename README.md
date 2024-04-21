@@ -15,6 +15,6 @@ Garrett Masuda - Created sequential insertion
 
 Bijou Raj - created optimal insertion
 
-Mason Orton - Created the read.me
+Mason Orton - Created the read.me, code testing
 
 ##Extra features implemented: unit testing
