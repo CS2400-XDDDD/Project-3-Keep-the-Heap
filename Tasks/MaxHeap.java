@@ -15,6 +15,7 @@ public final class MaxHeap<T extends Comparable<? super T>> implements MaxHeapIn
     {
         this(DEFAULT_CAPACITY);
     }
+
     public MaxHeap(int initialCapacity)
     {
         swapCount = 0;
@@ -71,6 +72,7 @@ public final class MaxHeap<T extends Comparable<? super T>> implements MaxHeapIn
             heap[newIndex] = heap[parentIndex];
             newIndex = parentIndex;
             parentIndex = newIndex / 2;
+            swapCount++;
         }
         heap[newIndex] = newEntry;
         lastIndex++;
