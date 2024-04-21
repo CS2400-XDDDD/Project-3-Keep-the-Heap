@@ -1,4 +1,5 @@
 package Tasks;
+
 import java.io.*;
 import java.util.*;
 
@@ -10,7 +11,19 @@ public class MaxHeapTest {
         testRemoveMax();
         testClear();
         testEnsureCapacity();
-        testOptimal();
+
+        try (PrintWriter writer = new PrintWriter(new File("output.txt"))) {
+        } catch (FileNotFoundException e) {
+            System.err.println("Failed to create output file: " + e.getMessage());
+        }
+
+        //data_random.txt insertions
+        testSequential("C:/Users/garre/OneDrive/Documents/CPP/CS2400/ProjectThree/Tasks/data.txt");
+        testOptimal("C:/Users/garre/OneDrive/Documents/CPP/CS2400/ProjectThree/Tasks/data.txt");
+
+        //data_sorted.txt insertions
+        testSequential("C:/Users/garre/OneDrive/Documents/CPP/CS2400/ProjectThree/Tasks/data_sorted.txt");
+        testOptimal("C:/Users/garre/OneDrive/Documents/CPP/CS2400/ProjectThree/Tasks/data_sorted.txt");
     }
 
     private static void testIsEmptyOnNewHeap() {
@@ -65,9 +78,9 @@ public class MaxHeapTest {
         System.out.println("Test ensure capacity passed.");
     }
 
-    private static void testOptimal() {
+    private static void testOptimal(String AbsoluteFilePath) {
         try{
-            Scanner scanner = new Scanner(new File("data.txt"));
+            Scanner scanner = new Scanner(new File(AbsoluteFilePath));
             List<Integer> inputList = new ArrayList<>();
             while (scanner.hasNextInt()) {
                 inputList.add(scanner.nextInt());
@@ -78,7 +91,7 @@ public class MaxHeapTest {
 
             MaxHeap<Integer> maxHeap = new MaxHeap<>(inputArray);
 
-            PrintWriter writer = new PrintWriter(new FileWriter("output.txt"));
+            PrintWriter writer = new PrintWriter(new FileWriter("C:/Users/garre/OneDrive/Documents/CPP/CS2400/ProjectThree/output.txt", true));
             writer.print("Heap built using optimal method: ");
             for (int i = 0; i < 10; i++) {
                 writer.print(maxHeap.getElement(i + 1) + " ");
@@ -87,15 +100,68 @@ public class MaxHeapTest {
             writer.println("Number of swaps in the heap creation: " + maxHeap.getSwapCount());
 
             writer.print("Heap after 10 removals: ");
+        
             for (int i = 0; i < 10; i++) {
                 Integer removed = maxHeap.removeMax();
             }
+            
             for (int i = 0; i < 10; i++) {
                 writer.print(maxHeap.getElement(i + 1) + " ");
             }
+            writer.println("\n");
             writer.close();
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public static void testSequential(String AbsoluteFilePath) {
+        MaxHeap<Integer> maxHeap = new MaxHeap<>(100);
+        ArrayList<Integer> numbers = new ArrayList<>();
+
+        // Read numbers from file
+        try (Scanner scanner = new Scanner(new File(AbsoluteFilePath))) {
+            while (scanner.hasNextInt()) {
+                numbers.add(scanner.nextInt());
+            }
+        } catch (FileNotFoundException e) {
+            System.err.println("Input file not found: " + e.getMessage());
+            return;
+        }
+
+        // Add numbers to the heap
+        for (int number : numbers) {
+            maxHeap.add(number);
+        }
+
+        // Write results to output file
+        try (PrintWriter writer = new PrintWriter(new FileWriter("output.txt", true))) {
+            // Write the full state of the heap after building
+            writer.println("Heap built using sequential insertions: " + getHeapArray(maxHeap));
+
+            // Write the number of swaps
+            writer.println("Number of swaps in the heap creation: " + maxHeap.getSwapCount());
+
+            // Remove the max element 10 times
+            for (int i = 0; i < 10; i++) {
+                maxHeap.removeMax();
+            }
+
+            // Write the full state of the heap after 10 removals
+            
+            writer.println("Heap after 10 removals: " + getHeapArray(maxHeap));
+            writer.println();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static String getHeapArray(MaxHeap<Integer> maxHeap) {
+        StringBuilder sb = new StringBuilder();
+        for (int i = 1; i <= 10; i++) {
+            if (i > 1) sb.append(",");
+            sb.append(maxHeap.getElement(i));
+        }
+        return sb.toString();
     }
 }
